@@ -10,9 +10,12 @@ from Nepali_nl.Nepali_nlp.Embedding import Embeddings
 import requests 
 from bs4 import BeautifulSoup 
 # from scraper import Scraper 
+from sentiment import sentiment 
 global_news = []
 current_scraped_news = []
 
+
+# app initiation 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -29,6 +32,7 @@ db = MongoEngine()
 db.init_app(app)
 
 
+# database model 
 class User(db.Document):
 	username = db.StringField()
 	email = db.StringField()
@@ -60,7 +64,7 @@ def register_user(username , email, password):
 		if not check_user_exists(email):
 			User(username=username, email=email, password=password).save()
 
-
+# routings 
 @app.route('/')
 def index_page():
 	return "Hello , World"
@@ -178,7 +182,8 @@ def process_news():
 	d = data.split('\n')
 	cal = []
 	news = News.objects(tested="False").first()
-	
+	# Actual detection being done here using AI . 
+	senti = sentiment.sentiment(news.news_title)
 	total_s = []
 	counter = 0 
 	if 'Sidha Kura' in news.news_title:
@@ -188,6 +193,7 @@ def process_news():
 
 			cal.append(news.news_title)
 			cal.append(d[counter])
+			# Looks if the scraped news is in other known trusted site . 
 			s = SequenceMatcher(None , cal[0], cal[1]).ratio()
 			total_s.append(s)
 
@@ -200,7 +206,7 @@ def process_news():
 
 @app.route('/get_news', methods=['GET'])
 def get_news():
-
+# gives news to the frontend . 
 	news = News.objects(tested="True", watched="False").all()
 
 	a = jsonify(news)
