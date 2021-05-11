@@ -16,20 +16,33 @@ function get_news(){
 						console.log(i.news_title)
 						var tag = document.createElement("li")
 						var small = document.createElement("small")
+						var small2 = document.createElement("small")
 						var br = document.createElement("br")
+						var br2 = document.createElement("br")
+
 						tag.style.cssText = 'color:red'
 						var text = document.createTextNode(i.news_title);
-						var text2 = document.createTextNode(i.similarlity)
+						var text2 = document.createTextNode(i.similarlity);
+						var text3 = document.createTextNode(i.source)
+						small2.appendChild(text3)
 						tag.appendChild(text)
-						small.appendChild(text2)
-						tag.appendChild(small)
 						tag.appendChild(br)
-						news.appendChild(tag)
+						tag.appendChild(small2)
+					 	tag.appendChild(br2)
+					 	news.appendChild(tag)
 					}else if(similar >= 20){
+						var br = document.createElement("br")
+						var br2 = document.createElement("br")
 						var tag = document.createElement("li")
+						var small = document.createElement("small")
 						tag.style.cssText = 'color:green'
 						var text = document.createTextNode(i.news_title);
+						var text2 = document.createTextNode(i.source);
+						small.appendChild(text2)
 						tag.appendChild(text)
+						tag.appendChild(br)
+						tag.appendChild(small)
+						tag.appendChild(br2)
 						news.appendChild(tag)
 					}
 			

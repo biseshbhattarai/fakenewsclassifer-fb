@@ -41,6 +41,7 @@ class News(db.Document):
 	cause = db.StringField()
 	similarlity = db.StringField()
 	watched = db.StringField()
+	source = db.StringField()
 
 class Report(db.Document):
 	title = db.StringField()
@@ -105,7 +106,8 @@ def receive_news():
 		req_data = request.get_json()
 		for i in req_data['lines']:
 			if i not in current_scraped_news:
-				News(news_title=i, detection="Not fake", tested="False", cause="", similarlity="", watched="False").save()
+
+				News(news_title=i, detection="Not fake", tested="False", cause="", similarlity="", watched="False", source="Scraped from facebook").save()
 				current_scraped_news.append(i)
 		process_news()
 		s = open('online_khabar.txt', 'r')
@@ -143,13 +145,29 @@ def direct_detect():
 		print(req_data)
 		link = req_data['lines']
 		res = requests.get(link)
+		print(link)
 		soup = BeautifulSoup(res.content , 'html.parser')
 		titles = soup.title.get_text()
-		print(titles)
-		News(news_title=titles, detection="Not fake", tested="False", cause="", similarlity="", watched="False").save()
-		current_scraped_news.append(titles)
-		process_news()
-		return "DOnw"
+		print("title", titles)
+		s = open('online_khabar.txt', 'r')
+		data = s.read()
+		d = data.split('\n')
+		cal = []
+		total_s = []
+		counter = 0 
+		if 'Sidha Kura' in titles : 
+			News(news_title=titles, detection="fake" tested="True" , cause="News looks irrelevant" , similarlity="0.5", watched='False', source="scraped directly").save()
+		else: 
+			for i in range(len(d) - 1):
+				cal.append(titles)
+				cal.append(d[counter])
+				s = SequenceMatcher(None , cal[0], cal[1]).ratio()
+				total_s.append(s)
+				counter += 1 
+				cal = []
+			similarlity = max(total_s)*100 
+			News(news_title=titles, detection="fake" tested="True" , cause="News looks irrelevant" , similarlity=str(similarlity), watched='False', source="scraped directly").save()
+
 
 
 	
@@ -163,18 +181,21 @@ def process_news():
 	
 	total_s = []
 	counter = 0 
-	for i in range(len(d) - 1):
+	if 'Sidha Kura' in news.news_title:
+		news.update(tested="True" , cause="News looks irrelevant" , similarlity="0.5")
+	else:
+		for i in range(len(d) - 1):
 
-		cal.append(news.news_title)
-		cal.append(d[counter])
-		s = SequenceMatcher(None , cal[0], cal[1]).ratio()
-		total_s.append(s)
+			cal.append(news.news_title)
+			cal.append(d[counter])
+			s = SequenceMatcher(None , cal[0], cal[1]).ratio()
+			total_s.append(s)
 
-		counter += 1 
-		cal = []
-	similarlity = max(total_s)*100
-	print(similarlity) 
-	news.update(tested="True" , cause="News not in trusted site" , similarlity=str(similarlity))
+			counter += 1 
+			cal = []
+		similarlity = max(total_s)*100
+		print(similarlity) 
+		news.update(tested="True" , cause="News not in trusted site" , similarlity=str(similarlity))
 
 
 @app.route('/get_news', methods=['GET'])
