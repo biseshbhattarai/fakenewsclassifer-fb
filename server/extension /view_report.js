@@ -1,3 +1,4 @@
+//view reported news as fake
 const n = document.getElementById("news")
 const Http = new XMLHttpRequest()
 let da

@@ -1,6 +1,7 @@
 
-
+//function that retrieves the classified news from the server and show it in the frontend .
 function get_news(){
+	//selecting news element button 
 	news = document.getElementById("news")
 	let dup_news = []
 	newss = localStorage.getItem("news")
@@ -57,7 +58,7 @@ function get_news(){
 }
 
 
-
+//function to fetch current logged in user or not logged in user . 
 function fetch(){
 const Http = new XMLHttpRequest()
 Http.onreadystatechange = function(){
@@ -74,6 +75,8 @@ Http.send()
 fetch()
 // get_news()
 
+
+//used to fetch news from facebook and send to the server for classification . 
 f = document.getElementById("fetch_news")
 f.addEventListener('click', function(e){
 	  chrome.tabs.query({
@@ -105,6 +108,7 @@ f.addEventListener('click', function(e){
 
 })
 
+//used to fetch news from facebook and give it to the server . 
 function fetch_news(){
 
 	  chrome.tabs.query({
@@ -138,7 +142,7 @@ function fetch_news(){
 }
 
 
-
+//direct detection of news through here. 
 let detect = document.getElementById("detect")
 
 detect.addEventListener('click', function(e){

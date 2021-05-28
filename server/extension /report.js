@@ -1,4 +1,4 @@
-
+//used for fetching current user
 function fetch(){
 const Http = new XMLHttpRequest()
 Http.onreadystatechange = function(){
@@ -15,6 +15,7 @@ Http.send()
 }
 fetch()
 
+//reporting news  thorough link and again the title is scraped . 
 var login = document.getElementById("report")
 login.addEventListener('click', function(e){
 	alert(1)

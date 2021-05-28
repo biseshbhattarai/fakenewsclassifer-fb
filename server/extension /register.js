@@ -1,4 +1,4 @@
-
+//register new user 
 submit = document.getElementById("submit")
 submit.addEventListener('click', function(e){
     fullname = document.getElementById("fullname")
@@ -17,7 +17,7 @@ submit.addEventListener('click', function(e){
       })
 
       Http.send(data)
-      alert(data)
+      alert("Error ! Email already registered.")
       debug.innerHTML = "Done"
     }else{
       

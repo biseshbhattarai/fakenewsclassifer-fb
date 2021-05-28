@@ -12,13 +12,7 @@ def preprocesstext(sentence):
 	tokens = Tokenizer().word_tokenize(sentence)
 	return [NepStemmer().stem(x) for x in tokens if x not in NEPALI_SW]
 
-# def get_cluster(samachar):
-#     processed_samachar = preprocesstext(samachar)
-#     newsindex = index[processed_samachar]
-#     for offset, simmilarity in newsindex:
-#         if simmilarity<0.55:
-#                 continue
-#         yield [all_domain[offset], all_url[offset], all_title[offset]]
+
 
 def estimator(all_title):
 	print('fdfd')

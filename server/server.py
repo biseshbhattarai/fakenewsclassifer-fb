@@ -75,14 +75,18 @@ def login():
 		req_data = request.get_json()
 		if req_data['email'] is not None and req_data['password'] is not None:
 			print(req_data['email'], req_data['password'])
-			userr = User.objects(email=req_data['email'], password=req_data['password']).first()
+			userr = User.objects(email=req_data['email']).first()
 			print(userr)
 			if userr.password == req_data['password']:
 				logged_in_user.append(req_data['email'])
+				return "Success"
+			else:
+				print("Wrong password")
+				return "Error"
 
 		else:
 			return "Error"
-		return "hh"
+		
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -160,7 +164,7 @@ def direct_detect():
 		total_s = []
 		counter = 0 
 		if 'Sidha Kura' in titles : 
-			News(news_title=titles, detection="fake" tested="True" , cause="News looks irrelevant" , similarlity="0.5", watched='False', source="scraped directly").save()
+			News(news_title=titles, detection="fake" ,tested="True" , cause="News looks irrelevant" , similarlity="0.5", watched='False', source="scraped directly").save()
 		else: 
 			for i in range(len(d) - 1):
 				cal.append(titles)
@@ -170,7 +174,7 @@ def direct_detect():
 				counter += 1 
 				cal = []
 			similarlity = max(total_s)*100 
-			News(news_title=titles, detection="fake" tested="True" , cause="News looks irrelevant" , similarlity=str(similarlity), watched='False', source="scraped directly").save()
+			News(news_title=titles, detection="fake" ,tested="True" , cause="News looks irrelevant" , similarlity=str(similarlity), watched='False', source="scraped directly").save()
 
 
 
@@ -183,7 +187,7 @@ def process_news():
 	cal = []
 	news = News.objects(tested="False").first()
 	# Actual detection being done here using AI . 
-	senti = sentiment.sentiment(news.news_title)
+	senti = sentiment(news.news_title)
 	total_s = []
 	counter = 0 
 	if 'Sidha Kura' in news.news_title:
