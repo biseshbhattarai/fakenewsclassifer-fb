@@ -9,9 +9,12 @@ login.addEventListener('click', function(e){
 		
 		const Http = new XMLHttpRequest()
 		Http.onreadystatechange = function(){
-			alert("Error. Incorrect username or password")
+
 			if(this.readyState == 4 && this.status == 200){
-				
+				if(Http.responseText == 0){
+					alert("Username or password incorrect.")
+				}
+				alert("Login success . Head over to profile")
 				
 		}
 		}
