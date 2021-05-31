@@ -82,10 +82,10 @@ def login():
 				return "Success"
 			else:
 				print("Wrong password")
-				return "Error"
+				return 0
 
 		else:
-			return "Error"
+			return 0
 		
 
 
@@ -129,7 +129,7 @@ def report():
 	if request.method == 'POST':
 		req_data = request.get_json()
 		link = req_data['news']
-		print(link)
+		
 		res = requests.get(link)
 		soup = BeautifulSoup(res.content , 'html.parser')
 		titles = soup.title.get_text()
@@ -142,7 +142,7 @@ def report():
 def get_report():
 	report = Report.objects(username=logged_in_user[0]).all()
 	a = jsonify(report)
-	print(a)
+	
 	return a 
 
 
@@ -150,10 +150,10 @@ def get_report():
 def direct_detect():
 	if request.method == 'POST':
 		req_data = request.get_json()
-		print(req_data)
+		
 		link = req_data['lines']
 		res = requests.get(link)
-		print(link)
+		
 		soup = BeautifulSoup(res.content , 'html.parser')
 		titles = soup.title.get_text()
 		print("title", titles)

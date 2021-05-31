@@ -17,7 +17,6 @@ submit.addEventListener('click', function(e){
       })
 
       Http.send(data)
-      alert("Error ! Email already registered.")
       debug.innerHTML = "Done"
     }else{
       

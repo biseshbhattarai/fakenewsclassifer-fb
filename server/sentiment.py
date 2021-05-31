@@ -1,3 +1,4 @@
+#This file is called after the model is trained . It loads the pickle file and classify the news in real time that is receives from the extension and database . 
 import nltk
 import random
 
@@ -28,7 +29,7 @@ class VoteClassifier(ClassifierI):
         for c in self._classifiers:
             v = c.classify(features)
             votes.append(v)
-
+        # Mathematically mode is used to average out the vote it received from all the classifier. 
         choice_votes = votes.count(mode(votes))
         conf = choice_votes / len(votes)
         return conf * 100
@@ -55,7 +56,7 @@ def find_features(document):
     return features
 
 
-
+#From here it loads all the pickled file and classify the news in real time . 
 open_file = open("pickled_algos/originalnaivebayes5k.pickle", "rb")
 classifier = pickle.load(open_file)
 open_file.close()
